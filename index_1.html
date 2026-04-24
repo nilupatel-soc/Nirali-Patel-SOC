@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nirali Patel — SOC Analyst Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0d1117;
+  --bg2:       #161b22;
+  --bg3:       #1c2330;
+  --panel:     #1e2736;
+  --panel2:    #242d3d;
+  --border:    rgba(99,179,237,0.15);
+  --border-hi: rgba(99,179,237,0.45);
+  --blue:      #63b3ed;
+  --blue-dim:  #4a90d9;
+  --cyan:      #76e4f7;
+  --green:     #68d391;
+  --amber:     #f6ad55;
+  --red:       #fc8181;
+  --text:      #e2e8f0;
+  --text-dim:  #8899aa;
+  --text-faint:#4a5568;
+  --glow-blue: rgba(99,179,237,0.12);
+  --glow-green:rgba(104,211,145,0.1);
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+  --display: 'Orbitron', monospace;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* Cursor */
+.cur{width:18px;height:18px;border:1.5px solid var(--blue);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.15s,border-color 0.2s;}
+.cur-dot{width:3px;height:3px;background:var(--blue);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+
+/* Animated grid background */
+.grid-bg{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background-image:
+    linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  z-index:0;pointer-events:none;
+}
+.grid-bg::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 70% 20%, rgba(99,179,237,0.06) 0%, transparent 60%),
+             radial-gradient(ellipse at 20% 80%, rgba(104,211,145,0.05) 0%, transparent 50%);
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0.9rem 3rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(13,17,23,0.88);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:var(--display);font-size:12px;
+  color:var(--blue);letter-spacing:3px;font-weight:800;
+  display:flex;align-items:center;gap:10px;
+}
+.nav-logo-dot{
+  width:8px;height:8px;background:var(--green);border-radius:50%;
+  box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 8px var(--green);}50%{box-shadow:0 0 16px var(--green),0 0 24px rgba(104,211,145,0.3);}}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{
+  font-family:var(--mono);font-size:11px;
+  color:var(--text-dim);text-decoration:none;
+  letter-spacing:1.5px;text-transform:uppercase;
+  transition:color 0.2s;padding:4px 0;
+  border-bottom:1px solid transparent;
+}
+.nav-links a:hover{color:var(--blue);border-bottom-color:var(--blue);}
+.nav-status{
+  font-family:var(--mono);font-size:10px;
+  color:var(--green);letter-spacing:1px;
+  display:flex;align-items:center;gap:6px;
+  padding:4px 12px;border:1px solid rgba(104,211,145,0.2);
+  background:rgba(104,211,145,0.05);
+}
+
+/* STATUSBAR */
+.statusbar{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  padding:0.35rem 3rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(13,17,23,0.92);
+  border-top:1px solid var(--border);
+  font-family:var(--mono);font-size:10px;color:var(--text-faint);
+}
+.sb-item{display:flex;align-items:center;gap:6px;}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+
+main{position:relative;z-index:2;}
+
+/* HERO */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:7rem 3rem 5rem;position:relative;
+}
+.hero-left{flex:1;max-width:680px;}
+.hero-right{
+  flex:0 0 320px;display:flex;flex-direction:column;gap:12px;
+  align-self:center;
+}
+
+/* METRIC CARDS */
+.metric{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:1rem 1.2rem;
+  position:relative;overflow:hidden;
+}
+.metric::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:2px;background:var(--blue);
+  box-shadow:0 0 8px var(--blue);
+}
+.metric.green::before{background:var(--green);box-shadow:0 0 8px var(--green);}
+.metric.amber::before{background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.metric.cyan::before{background:var(--cyan);box-shadow:0 0 8px var(--cyan);}
+.metric-label{font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.metric-val{font-family:var(--display);font-size:1.4rem;font-weight:800;color:var(--text);letter-spacing:1px;}
+.metric-sub{font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-top:3px;}
+
+.hero-tag{
+  font-family:var(--mono);font-size:11px;
+  color:var(--blue);letter-spacing:3px;
+  margin-bottom:1.2rem;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-tag span{
+  background:rgba(99,179,237,0.1);
+  border:1px solid rgba(99,179,237,0.2);
+  padding:3px 10px;
+}
+.hero-name{
+  font-family:var(--display);
+  font-size:clamp(2.2rem,5vw,4.2rem);
+  font-weight:800;line-height:1.1;
+  letter-spacing:2px;color:#fff;
+  margin-bottom:0.3rem;
+}
+.hero-name .hi{color:var(--blue);text-shadow:0 0 30px rgba(99,179,237,0.4);}
+.hero-role{
+  font-family:var(--mono);font-size:15px;
+  color:var(--cyan);margin-bottom:1.2rem;
+  min-height:22px;letter-spacing:1px;
+}
+.hero-desc{
+  font-size:16px;color:var(--text-dim);
+  line-height:1.75;max-width:520px;
+  margin-bottom:2rem;font-weight:400;
+}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+
+/* BUTTONS */
+.btn{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:12px 24px;border:1px solid var(--blue);
+  background:rgba(99,179,237,0.08);
+  color:var(--blue);cursor:none;
+  text-decoration:none;transition:all 0.2s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn:hover{background:var(--blue);color:var(--bg);}
+.btn-g{border-color:var(--green);color:var(--green);background:rgba(104,211,145,0.06);}
+.btn-g:hover{background:var(--green);color:var(--bg);}
+.btn-ghost{border-color:var(--border-hi);color:var(--text-dim);background:transparent;}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue);background:var(--glow-blue);}
+
+/* SECTION */
+section{padding:5.5rem 3rem;max-width:1140px;margin:0 auto;position:relative;}
+.sec-hdr{display:flex;align-items:center;gap:1.2rem;margin-bottom:3rem;}
+.sec-num{font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:2px;}
+.sec-title{
+  font-family:var(--display);
+  font-size:clamp(1.1rem,2.5vw,1.6rem);
+  font-weight:800;letter-spacing:3px;color:#fff;
+}
+.sec-line{flex:1;height:1px;background:linear-gradient(to right,var(--border-hi),transparent);}
+
+.divider{max-width:1140px;margin:0 auto;padding:0 3rem;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:3fr 2fr;gap:2.5rem;align-items:start;}
+.about-text p{font-size:15px;line-height:1.8;color:var(--text-dim);margin-bottom:1rem;}
+.about-text strong{color:var(--blue);font-weight:600;}
+
+.terminal{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:4px;overflow:hidden;margin-top:1.2rem;
+}
+.term-bar{
+  background:var(--bg3);padding:8px 14px;
+  display:flex;align-items:center;gap:6px;
+  border-bottom:1px solid var(--border);
+}
+.term-dot{width:10px;height:10px;border-radius:50%;}
+.term-body{padding:1.2rem 1.4rem;font-family:var(--mono);font-size:12px;line-height:2;}
+.p{color:var(--green);}
+.c{color:var(--cyan);}
+.o{color:var(--text-dim);padding-left:1rem;}
+.bar-fill{
+  display:inline-block;background:var(--blue);
+  height:8px;vertical-align:middle;margin:0 4px;
+  border-radius:1px;
+}
+
+.info-cards{display:flex;flex-direction:column;gap:12px;}
+.info-card{
+  background:var(--panel);border:1px solid var(--border);
+  padding:1.1rem 1.3rem;transition:border-color 0.2s;
+}
+.info-card:hover{border-color:var(--border-hi);}
+.ic-label{font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.ic-val{font-size:15px;font-weight:600;color:var(--text);}
+.ic-val span{color:var(--blue);}
+
+/* SKILLS */
+.skills-wrap{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;}
+.skill-block{background:var(--panel);border:1px solid var(--border);padding:1.4rem;transition:all 0.2s;}
+.skill-block:hover{border-color:var(--border-hi);background:var(--panel2);}
+.sb-title{
+  font-family:var(--mono);font-size:10px;
+  color:var(--blue);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:1rem;
+  display:flex;align-items:center;gap:8px;
+}
+.sb-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.tags{display:flex;flex-wrap:wrap;gap:7px;}
+.tag{
+  font-family:var(--mono);font-size:11px;
+  padding:4px 11px;
+  border:1px solid var(--border);
+  color:var(--text-dim);
+  background:rgba(255,255,255,0.02);
+  transition:all 0.2s;letter-spacing:0.5px;
+}
+.tag:hover{border-color:var(--blue);color:var(--blue);background:var(--glow-blue);}
+.tag.hi{border-color:rgba(99,179,237,0.3);color:var(--blue);background:rgba(99,179,237,0.07);}
+
+/* EXPERIENCE */
+.exp-wrap{display:flex;flex-direction:column;gap:1.5rem;}
+.exp-card{
+  background:var(--panel);border:1px solid var(--border);
+  padding:1.8rem;transition:border-color 0.2s;
+  display:grid;grid-template-columns:1fr auto;gap:1rem;
+}
+.exp-card:hover{border-color:var(--border-hi);}
+.ec-role{
+  font-family:var(--display);font-size:13px;
+  font-weight:800;color:#fff;letter-spacing:2px;margin-bottom:4px;
+}
+.ec-co{font-family:var(--mono);font-size:12px;color:var(--blue);margin-bottom:1rem;letter-spacing:1px;}
+.ec-date{
+  font-family:var(--mono);font-size:10px;
+  color:var(--text-dim);letter-spacing:1px;
+  border:1px solid var(--border);
+  padding:5px 12px;height:fit-content;white-space:nowrap;
+  background:var(--bg2);
+}
+.ec-bullets{list-style:none;}
+.ec-bullets li{
+  font-size:14px;color:var(--text-dim);
+  line-height:1.7;padding:3px 0 3px 1.4rem;
+  position:relative;font-weight:400;
+}
+.ec-bullets li::before{
+  content:'▸';color:var(--blue);
+  position:absolute;left:0;font-size:11px;top:5px;
+}
+
+/* DEVELOPMENT */
+.dev-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.dev-card{
+  background:var(--panel);border:1px solid var(--border);
+  padding:1.4rem;transition:all 0.2s;position:relative;
+  overflow:hidden;
+}
+.dev-card::after{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,var(--blue),var(--cyan));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 0.3s;
+}
+.dev-card:hover{border-color:var(--border-hi);background:var(--panel2);}
+.dev-card:hover::after{transform:scaleX(1);}
+.dc-icon{font-size:1.4rem;margin-bottom:0.8rem;}
+.dc-title{
+  font-family:var(--display);font-size:11px;
+  font-weight:800;color:#fff;letter-spacing:2px;
+  margin-bottom:4px;
+}
+.dc-org{font-family:var(--mono);font-size:10px;color:var(--blue);margin-bottom:0.7rem;letter-spacing:1px;}
+.dc-desc{font-size:13px;color:var(--text-dim);line-height:1.6;font-weight:400;}
+.dc-badge{
+  display:inline-block;margin-top:0.8rem;
+  font-family:var(--mono);font-size:9px;
+  padding:3px 9px;letter-spacing:1px;
+  border:1px solid var(--border);color:var(--text-dim);
+}
+.dc-badge.done{border-color:rgba(104,211,145,0.3);color:var(--green);}
+.dc-badge.wip{border-color:rgba(246,173,85,0.3);color:var(--amber);}
+.dc-badge.ongoing{border-color:rgba(99,179,237,0.3);color:var(--blue);}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start;}
+.contact-links{display:flex;flex-direction:column;gap:10px;margin-top:1.2rem;}
+.clink{
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--mono);font-size:12px;
+  color:var(--text-dim);text-decoration:none;
+  padding:12px 16px;border:1px solid var(--border);
+  background:var(--panel);transition:all 0.2s;letter-spacing:1px;
+}
+.clink:hover{border-color:var(--border-hi);color:var(--blue);background:var(--glow-blue);}
+.clink-icon{width:28px;text-align:center;font-size:1rem;}
+.resume-panel{
+  background:var(--panel);border:1px solid var(--border-hi);
+  padding:2rem;text-align:center;
+}
+.rp-icon{font-size:2.5rem;margin-bottom:1rem;}
+.rp-title{
+  font-family:var(--display);font-size:12px;
+  font-weight:800;color:var(--blue);
+  letter-spacing:3px;margin-bottom:0.6rem;
+}
+.rp-sub{font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-bottom:1.4rem;line-height:1.6;letter-spacing:1px;}
+
+/* THREAT DISPLAY */
+.threat-bar{
+  background:var(--bg2);border:1px solid var(--border);
+  padding:1rem 1.4rem;margin-top:1rem;
+  font-family:var(--mono);font-size:11px;
+}
+.threat-row{
+  display:flex;align-items:center;gap:12px;
+  padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.03);
+}
+.threat-row:last-child{border:none;}
+.t-label{width:120px;color:var(--text-dim);font-size:10px;letter-spacing:1px;}
+.t-track{flex:1;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;}
+.t-fill{height:100%;border-radius:2px;transition:width 1.5s ease;}
+.t-pct{width:32px;text-align:right;font-size:10px;color:var(--text-dim);}
+
+/* FADE IN */
+.fi{opacity:0;transform:translateY(16px);transition:opacity 0.5s,transform 0.5s;}
+.fi.v{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){
+  nav{padding:0.9rem 1.5rem;}
+  .nav-links,.nav-status,.hero-right{display:none;}
+  .hero{padding:5rem 1.5rem 3rem;flex-direction:column;}
+  section{padding:3.5rem 1.5rem;}
+  .about-grid,.skills-wrap,.dev-wrap,.contact-grid{grid-template-columns:1fr;}
+  .exp-card{grid-template-columns:1fr;}
+  .statusbar{padding:0.35rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-dot" id="cdot"></div>
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    NP // SOC-ANALYST
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#development">Development</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-status">● OPEN TO WORK</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home" style="max-width:100%;padding-top:7rem;">
+  <div class="hero-left">
+    <div class="hero-tag"><span>SECURITY OPERATIONS</span> PORTFOLIO</div>
+    <h1 class="hero-name">NIRALI<br><span class="hi">PATEL</span></h1>
+    <div class="hero-role" id="typed"></div>
+    <p class="hero-desc">Cybersecurity professional in training — specialising in Security Operations, Threat Detection and Incident Response. Based in Melbourne, Australia.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn">⬡ Hire Me</a>
+      <a href="#experience" class="btn-ghost btn">View Experience</a>
+      <a href="Resume Nirali SOC.pdf" download class="btn btn-g">↓ Resume</a>
+    </div>
+
+    <div class="threat-bar" style="margin-top:2rem;max-width:480px;">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:2px;margin-bottom:10px;">SKILL PROFICIENCY OVERVIEW</div>
+      <div class="threat-row">
+        <span class="t-label">NETWORK SEC</span>
+        <div class="t-track"><div class="t-fill" style="width:85%;background:var(--blue);"></div></div>
+        <span class="t-pct">85%</span>
+      </div>
+      <div class="threat-row">
+        <span class="t-label">THREAT DETECT</span>
+        <div class="t-track"><div class="t-fill" style="width:78%;background:var(--cyan);"></div></div>
+        <span class="t-pct">78%</span>
+      </div>
+      <div class="threat-row">
+        <span class="t-label">INCIDENT RESP</span>
+        <div class="t-track"><div class="t-fill" style="width:72%;background:var(--green);"></div></div>
+        <span class="t-pct">72%</span>
+      </div>
+      <div class="threat-row">
+        <span class="t-label">CLOUD SEC</span>
+        <div class="t-track"><div class="t-fill" style="width:68%;background:var(--amber);"></div></div>
+        <span class="t-pct">68%</span>
+      </div>
+      <div class="threat-row">
+        <span class="t-label">PYTHON / SCRIPTING</span>
+        <div class="t-track"><div class="t-fill" style="width:60%;background:var(--blue);"></div></div>
+        <span class="t-pct">60%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="metric">
+      <div class="metric-label">Current Status</div>
+      <div class="metric-val">ACTIVE</div>
+      <div class="metric-sub">Open to SOC roles · Melbourne</div>
+    </div>
+    <div class="metric green">
+      <div class="metric-label">Internship Experience</div>
+      <div class="metric-val">3 MOS</div>
+      <div class="metric-sub">1stop Solutions · Cybersecurity</div>
+    </div>
+    <div class="metric cyan">
+      <div class="metric-label">TryHackMe</div>
+      <div class="metric-val">SOC L1</div>
+      <div class="metric-sub">Active · Alert Triage · MITRE</div>
+    </div>
+    <div class="metric amber">
+      <div class="metric-label">Certification Target</div>
+      <div class="metric-val">SEC+</div>
+      <div class="metric-sub">CompTIA · In Progress 2026</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Education</div>
+      <div class="metric-val">MIT</div>
+      <div class="metric-sub">CQUniversity Melbourne · 2026</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec-hdr fi">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title">ABOUT_ME</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="fi">
+      <div class="about-text">
+        <p>I'm a <strong>Master of IT student at CQUniversity Melbourne</strong>, majoring in Network and Information Security, with a clear focus on building a career in Security Operations.</p>
+        <p>During my <strong>cybersecurity internship at 1stop Solutions</strong>, I performed vulnerability scans, monitored live network traffic with Wireshark and Nmap, configured AWS IAM access controls, and produced weekly security reports for 50+ staff.</p>
+        <p>Outside of university I actively practise SOC analyst workflows on <strong>TryHackMe</strong> — alert triage, packet analysis, MITRE ATT&CK mapping and incident response simulations. I am currently working towards <strong>CompTIA Security+</strong>.</p>
+      </div>
+      <div class="terminal">
+        <div class="term-bar">
+          <div class="term-dot" style="background:#fc8181;"></div>
+          <div class="term-dot" style="background:#f6ad55;"></div>
+          <div class="term-dot" style="background:#68d391;"></div>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-left:8px;letter-spacing:1px;">nirali@soc-terminal</span>
+        </div>
+        <div class="term-body">
+          <div><span class="p">nirali@soc</span>:~$ <span class="c">whoami</span></div>
+          <div class="o">Aspiring SOC Analyst — Melbourne, AU</div>
+          <div><span class="p">nirali@soc</span>:~$ <span class="c">cat goals.txt</span></div>
+          <div class="o">Target: Level 1 SOC Analyst → L2 within 2 years</div>
+          <div><span class="p">nirali@soc</span>:~$ <span class="c">cert --status</span></div>
+          <div class="o">CompTIA Security+ <span style="color:var(--amber);">[IN PROGRESS]</span> <span class="bar-fill" style="width:70px;"></span> 80%</div>
+          <div><span class="p">nirali@soc</span>:~$ <span class="c">availability --check</span></div>
+          <div class="o"><span style="color:var(--green);">OPEN</span> — Full-time · Part-time · Internship</div>
+          <div><span class="p">nirali@soc</span>:~$ <span class="c">_</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="info-cards fi">
+      <div class="info-card">
+        <div class="ic-label">Location</div>
+        <div class="ic-val">Melbourne, <span>Victoria AU</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">Degree</div>
+        <div class="ic-val">Master of <span>IT</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">Specialisation</div>
+        <div class="ic-val">Network & <span>Info Security</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">Target Role</div>
+        <div class="ic-val"><span>SOC</span> Analyst L1</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">Work Rights</div>
+        <div class="ic-val">Australia — <span>Valid Visa</span></div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">Availability</div>
+        <div class="ic-val" style="color:var(--green);">Immediate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="sec-hdr fi">
+    <span class="sec-num">02</span>
+    <h2 class="sec-title">SKILLS_&_TOOLS</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="skills-wrap">
+    <div class="skill-block fi">
+      <div class="sb-title">SOC & Detection</div>
+      <div class="tags">
+        <span class="tag hi">SIEM</span>
+        <span class="tag hi">Incident Response</span>
+        <span class="tag hi">Threat Detection</span>
+        <span class="tag hi">Log Analysis</span>
+        <span class="tag">Alert Triage</span>
+        <span class="tag">MITRE ATT&CK</span>
+        <span class="tag">Security Monitoring</span>
+        <span class="tag">Intrusion Detection</span>
+      </div>
+    </div>
+    <div class="skill-block fi">
+      <div class="sb-title">Tools & Platforms</div>
+      <div class="tags">
+        <span class="tag hi">Wireshark</span>
+        <span class="tag hi">Nmap</span>
+        <span class="tag hi">Kali Linux</span>
+        <span class="tag">Cisco Packet Tracer</span>
+        <span class="tag">TryHackMe</span>
+        <span class="tag">Linux</span>
+        <span class="tag">Windows Server</span>
+        <span class="tag">Metasploit</span>
+      </div>
+    </div>
+    <div class="skill-block fi">
+      <div class="sb-title">Cloud & Infrastructure</div>
+      <div class="tags">
+        <span class="tag hi">AWS IAM</span>
+        <span class="tag">Cloud Security</span>
+        <span class="tag">VPN</span>
+        <span class="tag">Firewall Management</span>
+        <span class="tag">Network Security</span>
+        <span class="tag">TCP/IP</span>
+        <span class="tag">DNS / DHCP</span>
+      </div>
+    </div>
+    <div class="skill-block fi">
+      <div class="sb-title">Programming & Analysis</div>
+      <div class="tags">
+        <span class="tag hi">Python</span>
+        <span class="tag">SQL</span>
+        <span class="tag">Vulnerability Scanning</span>
+        <span class="tag">Penetration Testing</span>
+        <span class="tag">Endpoint Security</span>
+        <span class="tag">Packet Analysis</span>
+        <span class="tag">Bash Scripting</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="sec-hdr fi">
+    <span class="sec-num">03</span>
+    <h2 class="sec-title">EXPERIENCE</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="exp-wrap">
+    <div class="exp-card fi">
+      <div>
+        <div class="ec-role">CYBER SECURITY SPECIALIST</div>
+        <div class="ec-co">1stop Solutions — Internship</div>
+        <ul class="ec-bullets">
+          <li>Performed vulnerability scans across company systems, documented findings and helped remediate identified security risks</li>
+          <li>Monitored live network traffic using Wireshark and Nmap, detecting anomalies and supporting incident investigations</li>
+          <li>Configured AWS IAM access controls and supported data backup testing to strengthen cloud security posture</li>
+          <li>Produced weekly security reports and phishing awareness materials distributed to 50+ staff</li>
+        </ul>
+      </div>
+      <div class="ec-date">JAN 2024 — MAR 2024</div>
+    </div>
+    <div class="exp-card fi">
+      <div>
+        <div class="ec-role">MASTER OF INFORMATION TECHNOLOGY</div>
+        <div class="ec-co">CQUniversity Melbourne — Network & Information Security</div>
+        <ul class="ec-bullets">
+          <li>Specialising in Network Security, Cloud Computing, Cryptography and AI fundamentals</li>
+          <li>Designed a secure file-sharing network with authentication layers and encryption controls</li>
+          <li>Applied cybersecurity frameworks to real-world case studies and industry assessments</li>
+        </ul>
+      </div>
+      <div class="ec-date">2024 — 2026</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DEVELOPMENT -->
+<section id="development">
+  <div class="sec-hdr fi">
+    <span class="sec-num">04</span>
+    <h2 class="sec-title">PROFESSIONAL_DEVELOPMENT</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="dev-wrap">
+    <div class="dev-card fi">
+      <div class="dc-icon">🛡️</div>
+      <div class="dc-title">SOC LEVEL 1</div>
+      <div class="dc-org">TryHackMe</div>
+      <div class="dc-desc">SIEM alert triage, packet analysis, MITRE ATT&CK mapping, phishing analysis and incident response simulations.</div>
+      <span class="dc-badge wip">IN PROGRESS</span>
+    </div>
+    <div class="dev-card fi">
+      <div class="dc-icon">🔐</div>
+      <div class="dc-title">COMPTIA SECURITY+</div>
+      <div class="dc-org">CompTIA</div>
+      <div class="dc-desc">Threats, attacks, vulnerabilities, identity management, cryptography and risk management fundamentals.</div>
+      <span class="dc-badge wip">TARGET 2026</span>
+    </div>
+    <div class="dev-card fi">
+      <div class="dc-icon">⚡</div>
+      <div class="dc-title">PRE-SECURITY PATH</div>
+      <div class="dc-org">TryHackMe</div>
+      <div class="dc-desc">Networking fundamentals, Linux basics, web security and core cybersecurity concepts — fully completed.</div>
+      <span class="dc-badge done">COMPLETED</span>
+    </div>
+    <div class="dev-card fi">
+      <div class="dc-icon">☁️</div>
+      <div class="dc-title">AWS CLOUD SECURITY</div>
+      <div class="dc-org">Amazon Web Services</div>
+      <div class="dc-desc">Hands-on IAM configuration, access policies and security groups during internship. Least privilege applied.</div>
+      <span class="dc-badge ongoing">HANDS-ON</span>
+    </div>
+    <div class="dev-card fi">
+      <div class="dc-icon">🌐</div>
+      <div class="dc-title">NETWORK SECURITY DESIGN</div>
+      <div class="dc-org">CQUniversity Melbourne</div>
+      <div class="dc-desc">Secure file-sharing architecture with authentication, encryption and endpoint controls in a simulated environment.</div>
+      <span class="dc-badge done">COMPLETED</span>
+    </div>
+    <div class="dev-card fi">
+      <div class="dc-icon">🎯</div>
+      <div class="dc-title">BLUE TEAM LABS</div>
+      <div class="dc-org">Self-Directed Learning</div>
+      <div class="dc-desc">Log analysis, threat hunting, malware basics and network forensics using industry tools — practised regularly.</div>
+      <span class="dc-badge ongoing">ONGOING</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="sec-hdr fi">
+    <span class="sec-num">05</span>
+    <h2 class="sec-title">CONTACT_&_RESUME</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="contact-grid">
+    <div class="fi">
+      <p style="font-size:15px;color:var(--text-dim);line-height:1.75;margin-bottom:0.5rem;">
+        Actively seeking <strong style="color:var(--blue);">SOC Analyst internships</strong> and entry-level cybersecurity roles in Melbourne. Recruiters, hiring managers and security professionals — let's connect.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:nilupatel6112@gmail.com" class="clink">
+          <span class="clink-icon">✉</span> nilupatel6112@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/nirali-patel-soc/" target="_blank" class="clink">
+          <span class="clink-icon">in</span> linkedin.com/in/nirali-patel-soc
+        </a>
+        <a href="https://tryhackme.com" target="_blank" class="clink">
+          <span class="clink-icon">⚑</span> TryHackMe Profile
+        </a>
+        <a href="https://nilupatel-soc.github.io/Nirali-Patel-SOC/" target="_blank" class="clink">
+          <span class="clink-icon">◎</span> nilupatel-soc.github.io/Nirali-Patel-SOC
+        </a>
+      </div>
+    </div>
+    <div class="resume-panel fi">
+      <div class="rp-icon">📄</div>
+      <div class="rp-title">DOWNLOAD RESUME</div>
+      <div class="rp-sub">SOC Analyst — Cybersecurity Portfolio<br>Nirali Patel · Melbourne, AU · April 2026</div>
+      <a href="Resume Nirali SOC.pdf" download class="btn" style="width:100%;justify-content:center;">↓ Download CV</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATUSBAR -->
+<div class="statusbar">
+  <div class="sb-item"><div class="sb-dot"></div> SYSTEM ONLINE — OPEN TO WORK</div>
+  <div id="ltime" style="font-family:var(--mono);font-size:10px;color:var(--text-faint);"></div>
+  <div>MELBOURNE, AU — UTC+10</div>
+</div>
+
+<script>
+// Cursor
+const cur=document.getElementById('cur'),cd=document.getElementById('cdot');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  cd.style.left=e.clientX+'px';cd.style.top=e.clientY+'px';
+});
+document.querySelectorAll('a,button,.tag,.dev-card,.exp-card,.info-card,.metric').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.style.transform='translate(-50%,-50%) scale(2.2)');
+  el.addEventListener('mouseleave',()=>cur.style.transform='translate(-50%,-50%) scale(1)');
+});
+
+// Typing
+const roles=['Aspiring SOC Analyst_','Threat Detection Enthusiast_','Network Security Analyst_','Incident Response Learner_','Cybersecurity Student_'];
+let ri=0,ci=0,del=false;
+const tel=document.getElementById('typed');
+function type(){
+  const w=roles[ri];
+  del?(tel.textContent=w.slice(0,--ci),ci===0&&(del=false,ri=(ri+1)%roles.length))
+     :(tel.textContent=w.slice(0,++ci),ci===w.length&&(del=true,setTimeout(type,1800),return));
+  setTimeout(type,del?35:75);
+}
+type();
+
+// Scroll fade in
+const obs=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('v')),{threshold:0.1});
+document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+
+// Clock
+function tick(){
+  document.getElementById('ltime').textContent=
+    new Date().toLocaleTimeString('en-AU',{timeZone:'Australia/Melbourne',hour12:false});
+}
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
